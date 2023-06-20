@@ -78,3 +78,5 @@ end
 gem "tailwindcss-rails", "~> 2.0"
 
 gem "tiktoken_ruby", "~> 0.0.5"
+
+gem "pdf-reader", "~> 2.11"
