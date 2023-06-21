@@ -1,9 +1,8 @@
-class Page < ApplicationRecord
+class DocumentPage < ApplicationRecord
   has_neighbors :embedding
-
   belongs_to :document
 
-  after_validation :generate_vector_embbeding
+  # after_validation :generate_vector_embbeding
 
   def embedded_input
     <<~INPUT
