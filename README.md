@@ -5,5 +5,6 @@ I can get in building a knowledge database using only the plain old rails and Po
 
 # Main Dependencies
 * A Postgres instance with pg_vector
-* A OpenIA api key(for using the embedding and chat APIs)
+* A OpenIA API key(for using the embedding and chat APIs)
+* React, only for rendering the pdf viewer
 
