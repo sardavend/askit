@@ -5,11 +5,18 @@
       <ask-it-pdf-viewer props-json='{"encodedFile":<%= @document.attachment_to_base64.to_json %>}'/>
     </div>
 
-    <div class="w-1/2 border-2 border-purple-400">
-      <div>
+    <div class="w-1/2 border-2 border-purple-400 p-3">
+      <div class="w-full flex-col">
+        <%= turbo_stream_from(:questions) %>
+        <% @inquires.each do |inc| %>
+          <p class="text-white font-semibold italic">Q: <%= inc.question.capitalize %></p>
+          <% if inc.answer %>
+            <p class="text-white pb-2">A: <%= inc.answer %><p>
+          <% end %>
+        <% end %>
       </div>
-      <%= form_with model: Inquire.new, class:"w-full flex" do |f| %>
-        <%= f.text_field :question, class: "w-5/6" %>
+      <%= form_with model: Inquire.new, class:"w-full flex pt-2", data: {turbo: false} do |f| %>
+        <%= f.text_field :question, class: "w-5/6", placeholder: 'Chat with your document'%>
         <%= f.submit 'Ask', class: "border-lime-300 bg-lime-300 p-2 border-2 border-lime-300 w-1/6" %>
       <% end %>
 

@@ -2,6 +2,12 @@ class Inquire < ApplicationRecord
   has_neighbors :embedding
   after_validation :generate_vector_embbeding
 
+  # after_update_commit -> {
+  #   broadcast_replace_to(:questions, partial: 'inquires/question_answer')
+  # }
+
+  MINIMAL_QUESTION_DISTANCE = 0.95
+
   def embedded_input
     <<~INPUT
     Question: #{question}
@@ -29,8 +35,6 @@ class Inquire < ApplicationRecord
         })
       self.answer = response.dig("choices",0, "message", "content")
       save!
-
-      self.answer
     end
   end
 
@@ -40,7 +44,7 @@ class Inquire < ApplicationRecord
         :embedding,
         embedding,
         distance: 'inner_product'
-      ).filter{|inquire| inquire.neighbor_distance > Document::MINIMAL_CONTENT_RELATEDNESS}.first
+      ).filter{|inquire| inquire.id != self.id && inquire.neighbor_distance > MINIMAL_QUESTION_DISTANCE}.first
   end
 
   private
