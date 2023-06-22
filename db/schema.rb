@@ -43,6 +43,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_172528) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "document_pages", force: :cascade do |t|
+    t.integer "num"
+    t.text "content"
+    t.bigint "document_id", null: false
+    t.vector "embedding", limit: 1536
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["document_id"], name: "index_document_pages_on_document_id"
+  end
+
   create_table "documents", force: :cascade do |t|
     t.text "title"
     t.jsonb "metadata", default: {}
@@ -59,17 +69,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_172528) do
     t.vector "embedding", limit: 1536
   end
 
-  create_table "pages", force: :cascade do |t|
-    t.integer "num"
-    t.text "content"
-    t.bigint "document_id", null: false
-    t.vector "embedding", limit: 1536
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["document_id"], name: "index_pages_on_document_id"
-  end
-
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "pages", "documents"
+  add_foreign_key "document_pages", "documents"
 end
