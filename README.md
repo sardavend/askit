@@ -1,24 +1,9 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+WIP. This project aims to be an open-source alternative to services like pdf.ai and similar, its more like an experiment to see how far
+I can get in building a knowledge database using only the plain old rails and Postgres, and a 'little' help of OpenAI embeddings API
 
-Things you may want to cover:
+# Main Dependencies
+* A Postgres instance with pg_vector
+* A OpenIA api key(for using the embedding and chat APIs)
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
