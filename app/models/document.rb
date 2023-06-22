@@ -8,7 +8,7 @@ class Document < ApplicationRecord
   has_many :document_pages, dependent: :destroy
 
   MINIMUN_PAGE_SIZE = 8
-  MINIMAL_CONTENT_RELATEDNESS = 0.8
+  MINIMAL_CONTENT_RELATEDNESS = 0.75
 
 
   def related_content(question)
@@ -19,6 +19,10 @@ class Document < ApplicationRecord
         distance: 'inner_product')
       .filter{|page| page.neighbor_distance > MINIMAL_CONTENT_RELATEDNESS}
       .pluck(:content).join(' ')
+  end
+
+  def attachment_to_base64
+    Base64.encode64(file.download)
   end
 
 
