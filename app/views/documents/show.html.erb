@@ -1,0 +1,19 @@
+<div class="flex-auto">
+  <h1 class="text-xl text-white"><%= @document.file.filename.to_s%></h1>
+  <div class="flex w-full">
+    <div class="w-1/2">
+      <ask-it-pdf-viewer props-json='{"encodedFile":<%= @document.attachment_to_base64.to_json %>}'/>
+    </div>
+
+    <div class="w-1/2 border-2 border-purple-400">
+      <div>
+      </div>
+      <%= form_with model: Inquire.new, class:"w-full flex" do |f| %>
+        <%= f.text_field :question, class: "w-5/6" %>
+        <%= f.submit 'Ask', class: "border-lime-300 bg-lime-300 p-2 border-2 border-lime-300 w-1/6" %>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>
