@@ -1,6 +1,7 @@
 class DocumentsController < ApplicationController
   before_action :set_document, only: :show
   def show
+    @inquires = Inquire.last(2)
 
   end
 
