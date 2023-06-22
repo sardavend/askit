@@ -8,6 +8,15 @@ class Inquire < ApplicationRecord
     INPUT
   end
 
+  def related_question
+    Inquire
+      .nearest_neighbors(
+        :embedding,
+        embedding,
+        distance: 'inner_product'
+      ).filter{|inquire| inquire.neighbor_distance > Document::MINIMAL_CONTENT_RELATEDNESS}.first
+  end
+
   private
   def generate_vector_embbeding
     client = OpenAI::Client.new

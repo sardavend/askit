@@ -1,29 +1,58 @@
 class Document < ApplicationRecord
   store_accessor :metadata,
-                  :author,
-                  :pages,
-                  :tokens
+                 :author,
+                 :tokens
 
   has_one_attached :file
 
-  has_many :pages
+  has_many :document_pages, dependent: :destroy
+
+  MINIMUN_PAGE_SIZE = 8
+  MINIMAL_CONTENT_RELATEDNESS = 0.8
+
+
+  def related_content(question)
+    document_pages
+      .nearest_neighbors(
+        :embedding,
+        question.embedding,
+        distance: 'inner_product')
+      .filter{|page| page.neighbor_distance > MINIMAL_CONTENT_RELATEDNESS}
+      .pluck(:content).join(' ')
+  end
 
 
   def extract_pages
-    raw = StringIO.new(file.download)
-    reader = PDF::Reader.new(raw)
-    tokens = reader.pages.reduce(0) do |accum, page|
-      next if page.text.size < 8
-      content = page.text.split.join(' ')
-      new_page = Page.new(num: page.number, content: content, document_id: id)
-      new_page.save
+    total_tokens = 0
+    extractor = Gpt::PdfExtractor.new(file.download)
 
-      accum += Gpt::Tiktoken.count(page.text)
-      accum
+    new_document_pages = extractor.pages.map do |page|
+      content = page.text.split.join(' ')
+      next if content.size < MINIMUN_PAGE_SIZE
+
+      total_tokens += Gpt::Tiktoken.count(content)
+      {num: page.number, content: content, document_id: self.id}
     end
 
-    self.tokens = tokens
-    self.pages = reader.pages
+    client = OpenAI::Client.new
+    content_list = new_document_pages.pluck(:content)
+    response = client
+                .embeddings(
+                  parameters: {
+                    model: Gpt::Tiktoken::DEFAULT_MODEL,
+                    input: content_list
+                  }
+                )
+
+    response.dig("data").each do |embed|
+      # Each index attribute in the response correspond to each index in the
+      # input array
+      new_document_pages[embed["index"]].merge!(embedding: embed["embedding"])
+    end
+
+    DocumentPage.insert_all!(new_document_pages)
+
+    self.tokens = total_tokens
     save
   end
 
