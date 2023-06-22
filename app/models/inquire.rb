@@ -8,7 +8,33 @@ class Inquire < ApplicationRecord
     INPUT
   end
 
-  def related_question
+
+  def answer_question
+    if similar_question
+      similar_question.answer
+    else
+      content = Document
+        .first.related_content(self)
+
+      puts "Context #{content}"
+
+      context = [{role: 'system', content: chabot_context_message(question, content)}]
+
+      client = OpenAI::Client.new
+      response = client.chat(
+        parameters: {
+          model: "gpt-3.5-turbo",
+          messages: context,
+          temperature: 0.2
+        })
+      self.answer = response.dig("choices",0, "message", "content")
+      save!
+
+      self.answer
+    end
+  end
+
+  def similar_question
     Inquire
       .nearest_neighbors(
         :embedding,
@@ -28,5 +54,12 @@ class Inquire < ApplicationRecord
     )
 
     self.embedding = response.dig('data', 0, 'embedding')
+  end
+
+  def chabot_context_message(query, context)
+    <<~INPUT
+    You are a friendly chatbot, your task is to respondo to a query question delimited by <#{query}>
+    based in the information provided: #{context}
+    INPUT
   end
 end
