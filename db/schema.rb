@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_20_172528) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_26_020055) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -43,6 +43,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_172528) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "chat_sessions", force: :cascade do |t|
+    t.bigint "document_id", null: false
+    t.text "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["document_id"], name: "index_chat_sessions_on_document_id"
+  end
+
   create_table "document_pages", force: :cascade do |t|
     t.integer "num"
     t.text "content"
@@ -67,9 +75,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_20_172528) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.vector "embedding", limit: 1536
+    t.bigint "chat_session_id", null: false
+    t.index ["chat_session_id"], name: "index_inquires_on_chat_session_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "chat_sessions", "documents"
   add_foreign_key "document_pages", "documents"
+  add_foreign_key "inquires", "chat_sessions"
 end

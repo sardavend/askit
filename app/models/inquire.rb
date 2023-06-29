@@ -1,6 +1,7 @@
 class Inquire < ApplicationRecord
   has_neighbors :embedding
   after_validation :generate_vector_embbeding
+  belongs_to :chat_session
 
   # after_update_commit -> {
   #   broadcast_replace_to(:questions, partial: 'inquires/question_answer')
