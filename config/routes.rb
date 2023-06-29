@@ -1,15 +1,11 @@
 Rails.application.routes.draw do
-  # get 'inquires/create'
-  # get 'inquires/index'
-  # get 'documents/show'
-  get 'demo', to: 'documents#show'
-  resources :documents, only: [:index, :show]
-  resources :inquires, only:[:create, :index]
-  get 'hello/world'
-
-
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
   # Defines the root path route ("/")
   # root "articles#index"
+  #
+  get 'demo', to: 'chat_sessions#show'
+  resources :documents, only: [:index, :show] do
+    resources :chat_sessions
+  end
+  resources :inquires, only: [:create, :index]
+  get 'hello/world'
 end
