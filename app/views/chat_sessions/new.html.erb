@@ -1,0 +1,7 @@
+<div class="flex flex-col">
+    <%= link_to "< Back to sessions", document_chat_sessions_path , class: "cursor_pointer border border-1 rounded-lg text-center mb-2" %>
+    <h1 class="mb-3"> New Session</h1>
+    <%= turbo_frame_tag @chat_session, class: "pt-2" do %>
+        <%= render "form", chat_session: @chat_session %>
+    <% end %>
+</div>

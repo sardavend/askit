@@ -1,0 +1,26 @@
+<div class="flex-auto">
+  <h1 class="text-xl text-white"><%= @document.file.filename.to_s%></h1>
+  <div class="flex w-full">
+    <div class="w-1/2">
+      <ask-it-pdf-viewer props-json='{"encodedFile":<%= @document.attachment_to_base64.to_json %>}'/>
+    </div>
+
+    <div class="w-1/2 border-2 border-purple-400 p-3">
+      <div class="w-full flex-col">
+        <%= turbo_stream_from(:questions) %>
+        <% @inquires.each do |inc| %>
+          <p class="text-white font-semibold italic">Q: <%= inc.question.capitalize %></p>
+          <% if inc.answer %>
+            <p class="text-white pb-2">A: <%= inc.answer %><p>
+          <% end %>
+        <% end %>
+      </div>
+      <%= form_with model: Inquire.new, class:"w-full flex pt-2", data: {turbo: false} do |f| %>
+        <%= f.text_field :question, class: "w-5/6 rounded-lg text-xl", placeholder: 'Chat with your document'%>
+        <%= f.submit 'Ask', class: "bg-gradient-to-r from-indigo-800 to-blue-500 p-2 border-2 w-1/6 rounded-lg ml-1 text-white text-xl font-semibold" %>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>

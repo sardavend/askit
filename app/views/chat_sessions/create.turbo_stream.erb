@@ -1,0 +1,2 @@
+<%= turbo_stream.prepend 'chat_session_list', partial: 'chat_sessions/chat_session', locals: {chat_session: @new_chat_session} %>
+<%= turbo_stream.update ChatSession.new, "" %>
