@@ -1,10 +1,15 @@
 class InquiresController < ApplicationController
+  before_action :set_document, :set_chat_session
+
   def create
-    new_inquire = Inquire.create(question_params)
-    if new_inquire.answer_question
-      redirect_to demo_path
+    @inquire = @chat_session.inquires.new(question_params)
+    if @inquire.save
+      @inquire.exe_async(:answer_question)
+      respond_to do |format|
+        # format.html redirect_to document_chat_sessions_path(@document, @chat_session)
+        format.turbo_stream
+      end
     else
-      redirect_to demo_path
     end
 
   end
@@ -13,9 +18,16 @@ class InquiresController < ApplicationController
   end
 
   private
-
   def question_params
     params.require(:inquire)
           .permit(:question)
+  end
+
+  def set_document
+    @document = Document.find(2)
+  end
+
+  def set_chat_session
+    @chat_session = @document.chat_sessions.find(params[:chat_session_id])
   end
 end
