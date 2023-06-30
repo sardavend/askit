@@ -1,7 +1,8 @@
 class ChatSessionsController < ApplicationController
   before_action :set_document
-  before_action :set_chat_session, only: [:edit, :update, :destroy]
+  before_action :set_chat_session, only: [:edit, :update, :destroy, :show]
   before_action :set_chat_sessions, only: [:index]
+  before_action :set_inquires, only: [:show]
 
   def create
     @new_chat_session = @document.chat_sessions.new(chat_session_params)
@@ -41,15 +42,15 @@ class ChatSessionsController < ApplicationController
     @document = Document.find(2)
   end
 
-  def set_inquires
-    @inquires = @document.chat_sessions.first.inquire
-  end
-
   def set_chat_session
     @chat_session = @document.chat_sessions.find(params[:id])
   end
 
   def set_chat_sessions
     @chat_sessions = @document.chat_sessions
+  end
+
+  def set_inquires
+    @inquires= @chat_session.inquires
   end
 end

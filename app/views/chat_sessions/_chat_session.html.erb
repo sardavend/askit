@@ -1,9 +1,13 @@
 <%= turbo_frame_tag chat_session, class: "flex w-full pt-3" do %>
     <div class="w-3/6">
-        <%= chat_session.title %>
+        <%= link_to document_chat_session_path(@document,chat_session), data:{turbo_frame: '_top'} do %>
+            <%= chat_session.title %>
+        <% end %>
     </div>
     <div class="w-2/6">
-        <%= time_ago_in_words(chat_session.created_at) %> ago
+        <%= link_to document_chat_session_path(@document,chat_session), data:{turbo_frame: '_top'} do %>
+            <%= time_ago_in_words(chat_session.created_at) %> ago
+        <% end %>
     </div>
     <div class="w-1/6 flex">
         <%= link_to edit_document_chat_session_path(@document, chat_session) do %>

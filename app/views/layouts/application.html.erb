@@ -15,7 +15,7 @@
     <main class="container mx-auto mt-8 px-5 flex">
       <%= yield %>
 
-      <dialog id="turbo-confirm" class="rounded-lg">
+      <dialog id="turbo-confirm" class="rounded-lg" data-turbo-temporary>
         <form method="dialog">
           <p>Are you sure?</p>
           <div class="p-2 flex items-center content-center">
