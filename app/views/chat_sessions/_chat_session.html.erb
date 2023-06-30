@@ -6,7 +6,7 @@
     </div>
     <div class="w-2/6">
         <%= link_to document_chat_session_path(@document,chat_session), data:{turbo_frame: '_top'} do %>
-            <%= time_ago_in_words(chat_session.created_at) %> ago
+            <%= chat_session.inquires.size %>
         <% end %>
     </div>
     <div class="w-1/6 flex">

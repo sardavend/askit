@@ -19,6 +19,11 @@
     <div class="w-1/2">
       <%= turbo_frame_tag ChatSession.new , class: "full-width mt-3"%>
       <%= turbo_frame_tag "chat_session_list", class: "flex-col" do %>
+        <div class="flex">
+          <div class="w-3/6 font-semibold">Title</div>
+          <div class="w-2/6 font-semibold">Questions</div>
+          <div class="w-1/6 font-semibold"></div>
+        </div>
         <%= render @chat_sessions %>
       <% end %>
     </div>
