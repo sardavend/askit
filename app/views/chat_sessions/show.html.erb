@@ -19,7 +19,7 @@
         <p class="text-center mt-2">Chat with your document, ask any question </p>
       <% end %>
       <%= turbo_frame_tag "chat_session_question_list", class: "flex-col overflow-y-scroll", style: "height: 630px" do %>
-        <%= render @inquires%>
+        <%= render partial: "inquires/inquire", collection: @inquires, locals: {typewriter: true } %>
       <% end %>
       <div class="self-end w-full">
         <%= form_with model: [@document, @chat_session, Inquire.new], class:"w-full flex pt-2" do |f| %>

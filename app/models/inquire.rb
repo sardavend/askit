@@ -10,7 +10,7 @@ class Inquire < ApplicationRecord
     broadcast_update_to(
       "questions",
       partial: 'inquires/inquire',
-      locals: { inquire: self },
+      locals: { inquire: self, typewriter: true},
       target: "chat_session_question_list"
     )
   }
