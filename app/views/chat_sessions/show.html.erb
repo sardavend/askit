@@ -1,0 +1,33 @@
+<%= turbo_stream_from "questions" %>
+<div class="p-2 w-full">
+  <div class="flex">
+    <h1 class="text-xl font-semibold w-6/12"><%= @document.file.filename%> </h1>
+    <div class="w-6/12 border-b border-slate-400 flex pb-3">
+      <h1 class="text-xl font-semibold w-1/2"> <%= @chat_session.title.upcase %></h1>
+      <%= link_to document_chat_sessions_path, class: 'w-1/2' do %>
+        <i class="text-lg text-indigo-600 font-medium flex cursor-pointer self-center">
+          <%= image_tag('back.svg', size:"25x25") %>
+          <span class="pl-1 text-right">back to sessions</span>
+        </i>
+      <% end %>
+    </div>
+  </div>
+  <div class="flex">
+    <%= render 'pdf_viewer' %>
+    <div class="flex flex-col w-1/2">
+      <% unless @inquires.size > 0 %>
+        <p class="text-center mt-2">Chat with your document, ask any question </p>
+      <% end %>
+      <%= turbo_frame_tag "chat_session_question_list", class: "flex-col overflow-y-scroll", style: "height: 630px" do %>
+        <%= render partial: "inquires/inquire", collection: @inquires, locals: {typewriter: true } %>
+      <% end %>
+      <div class="self-end w-full">
+        <%= form_with model: [@document, @chat_session, Inquire.new], class:"w-full flex pt-2" do |f| %>
+          <%= f.text_field :question, class: "w-5/6 rounded-lg text-xl", placeholder: 'Chat with your document'%>
+          <%= f.submit 'Ask', class: "bg-gradient-to-r from-indigo-800 to-blue-500 p-2 border-2 w-1/6 rounded-lg ml-1 text-white text-xl font-semibold" %>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+</div>

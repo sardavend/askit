@@ -6,6 +6,7 @@ class Document < ApplicationRecord
   has_one_attached :file
 
   has_many :document_pages, dependent: :destroy
+  has_many :chat_sessions, dependent: :destroy
 
   MINIMUN_PAGE_SIZE = 8
   MINIMAL_CONTENT_RELATEDNESS = 0.75
@@ -59,5 +60,4 @@ class Document < ApplicationRecord
     self.tokens = total_tokens
     save
   end
-
 end

@@ -1,0 +1,13 @@
+<%= turbo_frame_tag inquire, class: 'w-full pt-3' do %>
+    <p class="font-semibold text-lg">Q: <%= inquire.question %></p>
+    <p class="text-lg">A:
+        <span class="hadoken">
+            <% if typewriter %>
+                <ask-it-typewritter props-json='<%= {text: inquire.answer}.to_json %>' />
+            <% else %>
+                <%= inquire.answer %>
+            <% end%>
+
+        </span>
+    </p>
+<% end %>

@@ -1,10 +1,19 @@
 class Inquire < ApplicationRecord
+  include ExceAsync
+
   has_neighbors :embedding
   after_validation :generate_vector_embbeding
+  belongs_to :chat_session
+  delegate :document, to: :chat_session
 
-  # after_update_commit -> {
-  #   broadcast_replace_to(:questions, partial: 'inquires/question_answer')
-  # }
+  after_update_commit -> {
+    broadcast_update_to(
+      "questions",
+      partial: 'inquires/inquire',
+      locals: { inquire: self, typewriter: true},
+      target: "chat_session_question_list"
+    )
+  }
 
   MINIMAL_QUESTION_DISTANCE = 0.95
 
@@ -14,14 +23,12 @@ class Inquire < ApplicationRecord
     INPUT
   end
 
-
   def answer_question
     if similar_question
-      similar_question.answer
+      self.answer = similar_question.answer
+      save!
     else
-      content = Document
-        .first.related_content(self)
-
+      content = document.related_content(self)
       puts "Context #{content}"
 
       context = [{role: 'system', content: chabot_context_message(question, content)}]
@@ -39,12 +46,12 @@ class Inquire < ApplicationRecord
   end
 
   def similar_question
-    Inquire
-      .nearest_neighbors(
-        :embedding,
-        embedding,
-        distance: 'inner_product'
-      ).filter{|inquire| inquire.id != self.id && inquire.neighbor_distance > MINIMAL_QUESTION_DISTANCE}.first
+    @similar_question ||= Inquire
+                            .nearest_neighbors(
+                              :embedding,
+                              embedding,
+                              distance: 'inner_product'
+                            ).filter{|inquire| inquire.id != self.id && inquire.neighbor_distance > MINIMAL_QUESTION_DISTANCE}.first
   end
 
   private

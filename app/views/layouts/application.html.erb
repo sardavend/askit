@@ -11,9 +11,19 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
-  <body class="bg-black">
+  <body class="">
     <main class="container mx-auto mt-8 px-5 flex">
       <%= yield %>
+
+      <dialog id="turbo-confirm" class="rounded-lg" data-turbo-temporary>
+        <form method="dialog">
+          <p>Are you sure?</p>
+          <div class="p-2 flex items-center content-center">
+            <button class="border border-indigo-800 p-2 rounded-lg" value="cancel">Cancel</button>
+            <button class="border border-lime-500 p-2 rounded-lg"  value="confirm">Confirm</button>
+            </div>
+        </form>
+      </dialog>
     </main>
   </body>
 </html>
