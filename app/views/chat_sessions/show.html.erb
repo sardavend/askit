@@ -2,14 +2,17 @@
 <div class="p-2 w-full">
   <div class="flex">
     <h1 class="text-xl font-semibold w-6/12"><%= @document.file.filename%> </h1>
-    <div class="w-6/12 border-b border-slate-400 flex pb-3">
+    <div class="border-b border-slate-400 flex pb-3 w-6/12">
       <h1 class="text-xl font-semibold w-1/2"> <%= @chat_session.title.upcase %></h1>
-      <%= link_to document_chat_sessions_path, class: 'w-1/2' do %>
-        <i class="text-lg text-indigo-600 font-medium flex cursor-pointer self-center">
-          <%= image_tag('back.svg', size:"25x25") %>
-          <span class="pl-1 text-right">back to sessions</span>
-        </i>
-      <% end %>
+      <div class="w-1/2 flex justify-end">
+        <%= link_to document_chat_sessions_path, class: 'flex relative' do %>
+          <i class="text-md font-small bg-stone-100 flex cursor-pointer self-center border p-2 rounded-md border-black hover:-translate-y-1 hover:-translate-x-1 easy-out duration-150 z-10">
+            <%= image_tag('back.svg', size:"15x15") %>
+            <span class="pl-1 text-right">Back to sessions</span>
+          </i>
+          <div class="absolute bg-black top-0 left-0 w-full h-full rounded-md"></div>
+        <% end %>
+      </div>
     </div>
   </div>
   <div class="flex">
@@ -19,12 +22,17 @@
         <p class="text-center mt-2">Chat with your document, ask any question </p>
       <% end %>
       <%= turbo_frame_tag "chat_session_question_list", class: "flex-col overflow-y-scroll", style: "height: 630px" do %>
-        <%= render partial: "inquires/inquire", collection: @inquires, locals: {typewriter: true } %>
+        <%= render partial: "inquires/inquire", collection: @inquires, locals: {typewriter: false} %>
       <% end %>
       <div class="self-end w-full">
-        <%= form_with model: [@document, @chat_session, Inquire.new], class:"w-full flex pt-2" do |f| %>
-          <%= f.text_field :question, class: "w-5/6 rounded-lg text-xl", placeholder: 'Chat with your document'%>
-          <%= f.submit 'Ask', class: "bg-gradient-to-r from-indigo-800 to-blue-500 p-2 border-2 w-1/6 rounded-lg ml-1 text-white text-xl font-semibold" %>
+        <%= turbo_frame_tag Inquire.new do %>
+          <%= form_with model: [@document, @chat_session, Inquire.new], class:"w-full flex pt-2" do |f| %>
+            <%= f.text_field :question, class: "w-5/6 rounded-lg text-xl", placeholder: 'Chat with your document'%>
+            <div class="relative ml-3">
+              <%= f.submit 'Ask', class: "relative w-full h-full text-md bg-indigo-600 font-small flex cursor-pointer self-end text-white p-2 rounded-md hover:-translate-y-1 hover:-translate-x-1 easy-out duration-150 z-10" %>
+              <div class="absolute bg-black top-0 left-0 w-full h-full rounded-md"></div>
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>

@@ -13,7 +13,7 @@
         <%= link_to edit_document_chat_session_path(@document, chat_session) do %>
             <i><%= image_tag('edit.svg', size: '25x25', class: 'cursor-pointer')  %> </i>
         <% end %>
-        <%= link_to document_chat_session_path(@document, chat_session), data:{turbo_method: :delete, turbo_confirm: 'Are you sure? (all the questions on this sessions will be deleted)'} do %>
+        <%= link_to document_chat_session_path(@document, chat_session), data:{turbo_method: :delete, turbo_confirm: "Are you sure? (all the questions on this sessions will be deleted)"} do %>
             <i><%= image_tag('trash.svg', size: '25x25', class: 'cursor-pointer')  %> </i>
         <% end %>
     </div>
