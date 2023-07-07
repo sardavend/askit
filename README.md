@@ -9,3 +9,7 @@ I can get in building a knowledge database using only the plain old rails and Po
 * A OpenIA API key(for using the embedding and chat APIs)
 * React, only for rendering the pdf viewer
 
+## Live demo 
+
+comming soon
+
