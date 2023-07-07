@@ -13,13 +13,14 @@ class Document < ApplicationRecord
 
 
   def related_content(question)
-    document_pages
+    related_pages = document_pages
       .nearest_neighbors(
         :embedding,
         question.embedding,
         distance: 'inner_product')
-      .filter{|page| page.neighbor_distance > MINIMAL_CONTENT_RELATEDNESS}
-      .pluck(:content).join(' ')
+      .filter{ |page| page.neighbor_distance > MINIMAL_CONTENT_RELATEDNESS }
+
+    truncate_content(related_pages)
   end
 
   def attachment_to_base64
@@ -59,5 +60,14 @@ class Document < ApplicationRecord
 
     self.tokens = total_tokens
     save
+  end
+
+  private
+  def truncate_content(content, max_tokens = Gpt::Tiktoken::MAX_NUM_OF_TOKENS)
+    current_tokens = 0
+    content.filter do |content_page|
+      current_tokens += Gpt::Tiktoken.count(content_page.content)
+      current_tokens < max_tokens
+    end
   end
 end
