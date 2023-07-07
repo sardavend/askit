@@ -11,5 +11,5 @@ I can get in building a knowledge database using only the plain old rails and Po
 
 ## Live demo 
 
-comming soon
+coming soon
 
