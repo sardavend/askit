@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_26_020055) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_06_143548) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "vector"
@@ -52,12 +52,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_26_020055) do
   end
 
   create_table "document_pages", force: :cascade do |t|
-    t.integer "num"
     t.text "content"
     t.bigint "document_id", null: false
     t.vector "embedding", limit: 1536
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "identifier"
     t.index ["document_id"], name: "index_document_pages_on_document_id"
   end
 
@@ -76,6 +76,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_26_020055) do
     t.datetime "updated_at", null: false
     t.vector "embedding", limit: 1536
     t.bigint "chat_session_id", null: false
+    t.jsonb "metadata", default: {}
     t.index ["chat_session_id"], name: "index_inquires_on_chat_session_id"
   end
 
