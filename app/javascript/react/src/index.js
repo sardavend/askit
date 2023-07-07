@@ -1,7 +1,7 @@
 import { define } from 'remount'
 import Hello from "./components/Hello"
 import PdfViewer from "./components/PdfViewer"
-import TypeWritter from './components/Typewritter'
+import TypeWritter from "./components/TypeWritter"
 
 define({
   'ask-it-hello': Hello,

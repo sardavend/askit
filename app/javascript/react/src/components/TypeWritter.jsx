@@ -7,16 +7,16 @@ const Cursor = () => {
         <span className="animate-pulse text-indigo-500 font-bold"> | </span>
     )
 }
-
-const TypeWritter = ({text = null}) => {
+const TypeWritter = ({text = null, writerSpeed = 30}) => {
     if (text === null) return <Cursor />
+
     const [textLength, setTextLength] = useState(0)
     const interval = useRef(0)
 
     useEffect(() => {
         interval.current = setInterval(() => {
             setTextLength(textLength => textLength + 1)
-        }, 30);
+        }, writerSpeed);
         return () => clearInterval(interval.current)
     }, [text])
 
