@@ -24,6 +24,7 @@ class Document < ApplicationRecord
   end
 
   def attachment_to_base64
+    return unless file.attached?
     Base64.encode64(file.download)
   end
 
@@ -40,17 +41,10 @@ class Document < ApplicationRecord
       {num: page.number, content: content, document_id: self.id}
     end
 
-    client = OpenAI::Client.new
     content_list = new_document_pages.pluck(:content)
-    response = client
-                .embeddings(
-                  parameters: {
-                    model: Gpt::Tiktoken::DEFAULT_MODEL,
-                    input: content_list
-                  }
-                )
+    embeddings = Gpt::Embeddings.embed(content_list)
 
-    response.dig("data").each do |embed|
+    embeddings.each do |embed|
       # Each index attribute in the response correspond to each index in the
       # input array
       new_document_pages[embed["index"]].merge!(embedding: embed["embedding"])

@@ -1,5 +1,5 @@
 class ChatSessionsController < ApplicationController
-  before_action :set_document
+  before_action :set_document, except: [:demo]
   before_action :set_chat_session, only: [:edit, :update, :destroy, :show]
   before_action :set_chat_sessions, only: [:index]
   before_action :set_inquires, only: [:show]
@@ -32,14 +32,20 @@ class ChatSessionsController < ApplicationController
     @chat_session = ChatSession.new
   end
 
+  def demo
+    @document = Document.first
+    @chat_sessions = @document.chat_sessions
+    render :index
+  end
+
   private
   def chat_session_params
     params.require(:chat_session)
           .permit(:title)
   end
   def set_document
-    # @document = Document.find(params[:document_id])
-    @document = Document.find(2)
+    @document = Document.find(params[:document_id])
+    # @document = Document.find(2)
   end
 
   def set_chat_session
