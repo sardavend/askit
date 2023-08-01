@@ -1,0 +1,4 @@
+pdf_document:
+  name: file
+  record: one (Document)
+  blob: pdf_document_blob
