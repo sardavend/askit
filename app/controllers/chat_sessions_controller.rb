@@ -33,7 +33,7 @@ class ChatSessionsController < ApplicationController
   end
 
   def demo
-    @document = Document.first
+    @document = Document.find_by title: 'askit-demo-14041983'
     @chat_sessions = @document.chat_sessions
     render :index
   end

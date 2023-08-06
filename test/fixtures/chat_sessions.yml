@@ -7,3 +7,7 @@ one:
 two:
   document: two
   title: MyText
+
+chat_session_demo:
+  document: askit_demo_14041983
+  title: Demo Session
