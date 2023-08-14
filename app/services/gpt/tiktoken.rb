@@ -1,7 +1,7 @@
 module Gpt
   module Tiktoken
     extend self
-
+    MAX_NUM_OF_TOKENS = 2048
     DEFAULT_MODEL='text-embedding-ada-002'
 
     def count(string, model: DEFAULT_MODEL)

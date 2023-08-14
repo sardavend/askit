@@ -1,6 +1,9 @@
 class Inquire < ApplicationRecord
   include ExceAsync
 
+  store_accessor  :metadata,
+                  :result_pages
+
   has_neighbors :embedding
   after_validation :generate_vector_embbeding
   belongs_to :chat_session
@@ -28,8 +31,10 @@ class Inquire < ApplicationRecord
       self.answer = similar_question.answer
       save!
     else
-      content = document.related_content(self)
-      puts "Context #{content}"
+      related_content  = document.related_content(self)
+
+      content = related_content.pluck(:content).join(' ')
+      pages = related_content.pluck(:identifier)
 
       context = [{role: 'system', content: chabot_context_message(question, content)}]
 
@@ -41,6 +46,7 @@ class Inquire < ApplicationRecord
           temperature: 0.2
         })
       self.answer = response.dig("choices",0, "message", "content")
+      self.result_pages = pages
       save!
     end
   end

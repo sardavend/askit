@@ -6,7 +6,6 @@ class InquiresController < ApplicationController
     if @inquire.save
       @inquire.exe_async(:answer_question)
       respond_to do |format|
-        # format.html redirect_to document_chat_sessions_path(@document, @chat_session)
         format.turbo_stream
       end
     else
@@ -24,7 +23,7 @@ class InquiresController < ApplicationController
   end
 
   def set_document
-    @document = Document.find(2)
+    @document = Document.find(params[:document_id])
   end
 
   def set_chat_session

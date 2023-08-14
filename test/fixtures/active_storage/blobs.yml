@@ -1,0 +1,1 @@
+pdf_document_blob: <%= ActiveStorage::FixtureSet.blob filename: 'picozine_1_1.pdf' %>

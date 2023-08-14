@@ -82,3 +82,5 @@ gem "tiktoken_ruby", "~> 0.0.5"
 gem "pdf-reader", "~> 2.11"
 
 gem "sidekiq", "~> 7.1"
+
+gem "sitepress-rails", "~> 3.2"

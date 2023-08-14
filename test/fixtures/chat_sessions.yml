@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  document: one
   title: MyText
-  metadata:
 
 two:
+  document: two
   title: MyText
-  metadata:
 
-askit_demo_14041983:
-  title: askit-demo-14041983
-  metadata:
+chat_session_demo:
+  document: askit_demo_14041983
+  title: Demo Session

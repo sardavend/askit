@@ -3,7 +3,9 @@
 one:
   question: MyText
   answer: MyText
+  chat_session: one
 
 two:
   question: MyText
   answer: MyText
+  chat_session:  two

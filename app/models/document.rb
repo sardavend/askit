@@ -13,16 +13,18 @@ class Document < ApplicationRecord
 
 
   def related_content(question)
-    document_pages
+    related_pages = document_pages
       .nearest_neighbors(
         :embedding,
         question.embedding,
         distance: 'inner_product')
-      .filter{|page| page.neighbor_distance > MINIMAL_CONTENT_RELATEDNESS}
-      .pluck(:content).join(' ')
+      .filter{ |page| page.neighbor_distance > MINIMAL_CONTENT_RELATEDNESS }
+
+    truncate_content(related_pages)
   end
 
   def attachment_to_base64
+    return unless file.attached?
     Base64.encode64(file.download)
   end
 
@@ -39,17 +41,10 @@ class Document < ApplicationRecord
       {num: page.number, content: content, document_id: self.id}
     end
 
-    client = OpenAI::Client.new
     content_list = new_document_pages.pluck(:content)
-    response = client
-                .embeddings(
-                  parameters: {
-                    model: Gpt::Tiktoken::DEFAULT_MODEL,
-                    input: content_list
-                  }
-                )
+    embeddings = Gpt::Embeddings.embed(content_list)
 
-    response.dig("data").each do |embed|
+    embeddings.each do |embed|
       # Each index attribute in the response correspond to each index in the
       # input array
       new_document_pages[embed["index"]].merge!(embedding: embed["embedding"])
@@ -59,5 +54,14 @@ class Document < ApplicationRecord
 
     self.tokens = total_tokens
     save
+  end
+
+  private
+  def truncate_content(content, max_tokens = Gpt::Tiktoken::MAX_NUM_OF_TOKENS)
+    current_tokens = 0
+    content.filter do |content_page|
+      current_tokens += Gpt::Tiktoken.count(content_page.content)
+      current_tokens < max_tokens
+    end
   end
 end

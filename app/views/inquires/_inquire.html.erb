@@ -3,11 +3,18 @@
     <p class="text-lg">A:
         <span class="hadoken">
             <% if typewriter %>
-                <ask-it-typewritter props-json='<%= {text: inquire.answer}.to_json %>' />
+                <ask-it-typewritter
+                    key={<%= inquire.id %>}
+                    props-json='<%= {text: inquire.answer}.to_json %>'
+                />
             <% else %>
                 <%= inquire.answer %>
             <% end%>
-
         </span>
+        <p class="italic">
+            <% inquire.result_pages&.each do |rp| %>
+                p. <%= rp %>
+            <%end%>
+        </p>
     </p>
 <% end %>
